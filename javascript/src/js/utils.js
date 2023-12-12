@@ -1,25 +1,25 @@
 /**
  * Common utility values and functions for task
  */
-
+ 
 //////////////////////////////////////////
 // Reuseable stimuli
 // ------------------------
-
+ 
 // HTML for text plugin
 var spacebar_html = "<code>&lt;SPACEBAR&gt;</code>";
 var continue_html = "<p>Press the " + spacebar_html + " to continue.</p>";
 var begin_html = "<p>Press the " + spacebar_html + " to begin the task.</p>";
-
-
-
+ 
+ 
+ 
 //////////////////////////////////////////
 // vars
 // ------------------------
 //images----
 var cue_index;
 var currentTrialArray;
-
+ 
 //ratio for scaling stimulus image if screen height is too small to display the task
 //window innerHeight -height of the viewport that shows the website
 if (window.innerWidth < 1400) {
@@ -27,24 +27,24 @@ if (window.innerWidth < 1400) {
 } else {
 	var scaleImage = 1;
 }
-
+ 
 // stimuli width, height, y-axis
 var stimh = settings.stimulus_size[0];
 var stimw = settings.stimulus_size[1];
 var hstimh = stimh / 2;
 var hstimw = stimw / 2;
 var stimy = ((settings.canvas_height / 2) - (stimh / 2))
-
+ 
 //stimulus size and location
 var display_locs = [[0, (stimy)], [(settings.canvas_width - stimw), (stimy)]];
-
+ 
 //fixation width and height
 var fix_w = (settings.fixation_size[0]);
 var fix_h = (settings.fixation_size[1]);
-
+ 
 //fixation coordinates
 var fix_xy = [((settings.canvas_width / 2) - (fix_w / 2)), ((settings.canvas_height / 2) - (fix_w / 2))]
-
+ 
 //check if chrome - for outputting heap size
 if (browser == 'Chrome') {
 	var heap_used = (window.performance.memory.usedJSHeapSize / 1000000 + "MB")
@@ -53,7 +53,7 @@ if (browser == 'Chrome') {
 	heap_used = '-1';
 	heap_limit = '-1';
 }
-
+ 
 ///----------task design----------///
 //create pofa trials for block
 function all_pofa_trials(){
@@ -75,7 +75,7 @@ function all_pofa_trials(){
 	};
 	return pofa_task;
 };
-
+ 
 //create iaps trials for block
 var iaps_block = [];
 function all_iaps_trials(){
@@ -111,7 +111,7 @@ function all_iaps_trials(){
 	};
 	return iaps_task;
 };
-
+ 
 //combining pofa with iaps
 function all_task_trials(){
 	merge_iaps = all_pofa_trials();
@@ -119,14 +119,14 @@ function all_task_trials(){
 	merge_task = _.merge({}, merge_iaps, merge_pofa)
 	return merge_task
 };
-
+ 
 ///----------for eyetracking----------///
 ///----------getting output of luminance----------///
 //image webcam frame
 var img;
 var brightness;
 var lumin;
-
+ 
 function snapshot() {
 	var ctx = webgazerVideoCanvas.getContext('2d');
 	var img = webgazerVideoCanvas.toDataURL('image/png');
@@ -137,7 +137,7 @@ function snapshot() {
 		lumin = brightness
 	});
 };
-
+ 
 //image luminance
 function getImageBrightness(imageSrc, callback) {
 	var img = document.createElement('img'),
@@ -166,7 +166,7 @@ function getImageBrightness(imageSrc, callback) {
 		callback(brightness);
 	};
 }
-
+ 
 ///----------using webworker----------///
 ///----------for eyetracking----------///
 //1.) custom event listener to begin webworker once task starts
@@ -175,14 +175,14 @@ var sampling_listener;
 function createEvent() {
 	console.log('%ccustom event for WebWorker created.','color: blue')
 	sampling_listener = new CustomEvent("task_start", {});
-
+ 
 	//event listener
 	document.addEventListener("task_start", function (e) {
 		//The object that receives a notification
 		start_sampling();
 	});
 };
-
+ 
 //2.) create webworker
 var sample_array = [];
 var sample_event;
@@ -225,7 +225,7 @@ function start_sampling() {
 		};
 	};
 }
-
+ 
 //----------for eyetracking----------///
 ///---------combine behavioral and eyetracking data----------///
 function merge_array(practice_data, behavioral_data, sample_data) {
@@ -239,7 +239,7 @@ function merge_array(practice_data, behavioral_data, sample_data) {
 	};
 	return new_array;
 };
-
+ 
 //////////////////////////////////////////
 // Functions
 // ------------------------
@@ -266,7 +266,7 @@ var loading = new ProgressBar.Circle('#progress', {
 	step: function (state, circle) {
 		circle.path.setAttribute('stroke', state.color);
 		circle.path.setAttribute('stroke-width', state.width);
-
+ 
 		var value = Math.round(circle.value() * 100);
 		if (value === 0) {
 			circle.setText('');
@@ -274,11 +274,11 @@ var loading = new ProgressBar.Circle('#progress', {
 			circle.setText(value + "%");
 		}
 	}
-
+ 
 });
 loading.text.style.fontFamily = 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif';
 //loading.text.style.fontSize = '2rem';
-
+ 
 //check if user switches tabs in browser window
 var vis = (function () {
 	var stateKey, eventKey, keys = {
@@ -298,7 +298,7 @@ var vis = (function () {
 		return !document[stateKey];
 	}
 })();
-
+ 
 /*heatmap*/
 var bins;
 function heatmap(raw_data) {
@@ -331,7 +331,7 @@ function heatmap(raw_data) {
             console.log('dropped ' + pos);
         }
     }
-
+ 
     // remove empty bins
     var binsc = [];
     for (var i = 0; i < bins.length; i++) {
@@ -339,7 +339,7 @@ function heatmap(raw_data) {
             binsc.push(bins[i]);
         }
     }
-
+ 
     // create heatmap
     $('body').append("<canvas id=\"heatmap\"></canvas>");
     $('#heatmap').attr('width', window.innerWidth);
@@ -350,8 +350,8 @@ function heatmap(raw_data) {
     heat.radius(30,50);
     heat.max(max).data(binsc).draw();
 }
-
-
+ 
+ 
 /*get gpu*/
 var gpu;
 function getGPU() {
@@ -376,7 +376,7 @@ function getGPU() {
 		}
 	})
 };
-
+ 
 //check fullscreen
 //at each trial check if fullscreen #if not prompt user and store isFullscreen in csv file
 ///window.screen.height = size of monitor height; window.innerHeight = size of browser viewport height; 
@@ -391,7 +391,7 @@ function printDimensions() {
 	console.log("window.outerWidth: "+window.outerWidth)
 	console.log("window.screen.width: "+window.screen.width)
 };
-
+ 
 var isFullscreen;
 function checkfullscreen() {
 	if ((window.innerHeight < (.85*window.screen.height)) && (window.innerWidth < (.85*window.screen.width))) {
@@ -437,7 +437,7 @@ function checkfullscreen() {
 		isFullscreen = true;
 	};
 };
-
+ 
 //run break before begining block 4 and block 6
 function isBreak(){
 	//update server with portion of task
@@ -475,52 +475,54 @@ function isBreak(){
 		jsPsych.resumeExperiment(); //resume experiment
 	});
 };
-
+ 
 // sum a list of values
 function sum(list) {
 	return _.reduce(list, function (memo, num) {
 		return memo + num;
 	});
 }
-
+ 
 // convert milliseconds to minutes, rounding up
 function millisecondsToMinutes(ms) {
 	return Math.ceil(ms / 1000 / 60);
 }
-
+ 
 // get url parameters
-var urlparam;
-function getUrlParams() {
-	uri = new URI(window.location.href);
-	//var ID = uri.fragment();
-	//return ID;
-	urlparam = uri.search(true);
-	if (_.isEmpty(urlparam)){
-		urlparam = null;
-		console.log('%c2-3.getUrlParams() failed','color: red');
-		EmailFail();
-	} else {
-		urlparam.rtco = Number(urlparam.rtco);
-		console.log('%c2-3.getUrlParams() success','color: green');
-	};
-	return urlparam;
-}
-
+// var urlparam;
+// function getUrlParams() {
+// 	uri = new URI(window.location.href);
+// 	//var ID = uri.fragment();
+// 	//return ID;
+// 	urlparam = uri.search(true);
+// 	if (_.isEmpty(urlparam)){
+// 		urlparam = null;
+// 		console.log('%c2-3.getUrlParams() failed','color: red');
+// 		EmailFail();
+// 	} else {
+// 		urlparam.rtco = Number(urlparam.rtco);
+// 		console.log('%c2-3.getUrlParams() success','color: green');
+// 	};
+// 	return urlparam;
+// }
+ 
 // try to get a participant ID
 function getParticipantId() {
 	// first attempt to get PID via URL params
 	console.log('%c2-2.attempting getUrlParams()...','color: orange');
-	sub_idc = getUrlParams();
+	//sub_idc = getUrlParams();
 	// then use window prompt
 	//sub_idc = sub_idc || window.prompt("Please enter your ID");
 	// as a last resort, generate a jsPsych random ID
-	if (debug){
-		sub_idc = sub_idc || {uname: jsPsych.randomization.randomID().substring(0,6), code: _.shuffle(['AAA','BBB'])[0], rtco:1};
-	};
+	// if (debug){
+	// 	sub_idc = sub_idc || {uname: jsPsych.randomization.randomID().substring(0,6), code: _.shuffle(['AAA','BBB'])[0], rtco:1};
+	// };
+	// return sub_idc;
+	sub_idc = {uname: jsPsych.randomization.randomID().substring(0,6), code: 1555.4911};
 	return sub_idc;
 };
-
-
+ 
+ 
 //check database for subject id and session number
 //if new subject, prepare pid
 var pid, db_compare, participant_id, start_task, isAdmin, idc, condition;
@@ -533,6 +535,8 @@ function getDatabase() {
 		participant_id = idc.uname;
 		console.log('%c3.getParticipantId() success','color: green',idc);
 		//check database for subject data
+		console.log(idc.code);
+		console.log(idc.uname);
 		$.ajax({
 				url: "src/php/get.php",
 				type: 'post',
@@ -628,7 +632,7 @@ function getDatabase() {
 			})
 	});
 }
-
+ 
 //once task finishes post new row to database
 function postDatabase() {
 	$.ajax({
@@ -656,7 +660,7 @@ function postDatabase() {
 		console.log(response)
 	})
 }
-
+ 
 //post email if issue running task
 function EmailFail() {
 	$.ajax({
@@ -686,7 +690,7 @@ function EmailFail() {
 		console.log('%c11.EmailFail() failed','color: red');
 	})
 };
-
+ 
 //post email if current session score >= baseline  
 function EmailBaseline() {
 	$.ajax({
@@ -710,13 +714,13 @@ function EmailBaseline() {
 		console.log('%c11.EmailBaseline() failed','color: red');
 	})
 };
-
+ 
 //redirect back to SONA
 function redirectSona() {
 	id_redirect = '&survey_code=' + participant_id
 	$(location).attr('href', 'https://utexas.sona-systems.com/webstudy_credit.aspx?experiment_id=471&credit_token=1c15f6958b8844c8be1f69c041a68dbe' + id_redirect)
 };
-
+ 
 //check if more than 30% of subject trials have long RT and/or no resp, mark as slow on db
 function checkPerformance(){
 	if (lslow.length >= (.30*ltask_acc.length)){
@@ -726,7 +730,7 @@ function checkPerformance(){
 	}
 	return isSlow
 }
-
+ 
 //set emoji in feedback
 var PID_emoji;
 function checkPID(){
@@ -742,7 +746,7 @@ function checkPID(){
 					'</div>'
 	};	
 };
-
+ 
 // post data to the server using an AJAX call
 var taskEnd; //experiment end time
 function saveData(filename, filedata) {
@@ -811,7 +815,7 @@ function saveData(filename, filedata) {
 				postDatabase();//post participation to database
 				//setTimeout(redirectSona, 10000);//added setTimeout as redirect back to Sona
 			}
-
+ 
 	})
 	.fail(function(jqXHR, textStatus, error, response){
 		pid.uploaded = 'false'; //file not successfully uploaded
@@ -837,7 +841,7 @@ function saveData(filename, filedata) {
 		};
 	})
 };
-
+ 
 /*save locally if server failed*/
 function saveLocalCSV(text, name, type) {
 	var a = document.createElement("a");

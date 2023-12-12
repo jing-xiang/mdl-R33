@@ -12,15 +12,16 @@ if(!isset($_SERVER['HTTP_REFERER'])){
 };
 
 /*query request*/;
-$subject = "'".$_POST[subject]."'";
-$code = "'".$_POST[code]."'";
+$subject = "'".$_POST['subject']."'";
+$code = "'".$_POST['code']."'";
+
 //echo $subject."\r\n";
 
 /*SQL server connection information*/
 // hidden for public release on github
 $host = 'mysql.utweb.utexas.edu';
-$user = 'xxxxx';
-$pass = 'xxxxx';
+$user = 'utw10623';
+$pass = '98J8q89tqwIl3wHq';
 $db = 'r33';
 
 /*get user location - home or lab*/
